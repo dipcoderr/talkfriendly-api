@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: talkfriendly-api
+  datasource:
+    # Supabase transaction pooler is the recommended production endpoint.
+    url: jdbc:postgresql://${SUPABASE_DB_HOST:localhost}:${SUPABASE_DB_PORT:5432}/${SUPABASE_DB_NAME:talkfriendly}?sslmode=${SUPABASE_DB_SSL_MODE:require}
+    username: ${SUPABASE_DB_USERNAME:talkfriendly}
+    password: ${SUPABASE_DB_PASSWORD:talkfriendly}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    # Flyway keeps the schema in sync with this service's migration scripts.
+
+server:
+  error:
+    include-message: never
+
+app:
+  cors:
+    allowed-origins: ${FRONTEND_ORIGIN:http://localhost:3000,https://talkfriendly.vercel.app}
+  jwt:
+    secret: ${JWT_SECRET:VGhpcy1pcy1kZXZlbG9wbWVudC1vbmx5LWFuZC1tdXN0LWJlLXJlcGxhY2VkLTI1Ni1iaXQ=}
+    access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:PT24H}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
